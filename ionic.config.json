@@ -1,5 +1,7 @@
 {
   "name": "ionic-tracker",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

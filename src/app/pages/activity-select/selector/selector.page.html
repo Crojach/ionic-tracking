@@ -1,0 +1,27 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Odaberite željenu aktivnost</ion-title>
+		<ion-buttons slot="end">
+			<ion-button (click)="dismiss()" icon-only>
+				<ion-icon slot="start" name="close"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-item
+		*ngFor="let activity of activities"
+		lines="full"
+		(click)="select(activity.id)"
+	>
+		<ion-icon [name]="activity.icon"></ion-icon>
+		<div class="activity-name">
+			<p class="title">{{activity.name}}</p>
+			<p class="duration">24.10. - 8.11.</p>
+		</div>
+		<ion-button class="select-button" size="small" fill="solid">
+			Odaberi
+		</ion-button>
+	</ion-item>
+</ion-content>

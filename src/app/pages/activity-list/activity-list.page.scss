@@ -1,0 +1,24 @@
+.activity {
+  p {
+    margin: 2px;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  .date {
+    font-weight: bold;
+    font-size: small;
+  }
+
+  .time {
+    color: gray;
+    font-size: small;
+  }
+}
+
+.checkmark {
+  position: absolute;
+  right: 16px;
+}

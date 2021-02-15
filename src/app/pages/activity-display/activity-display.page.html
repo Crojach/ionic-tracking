@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+			<ion-back-button></ion-back-button>
+		</ion-buttons>
+		<ion-title>{{activity?.nazivAktivnosti}}</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<div id="map"></div>
+	<ion-grid>
+		<ion-row class="ion-justify-content-start ion-text-center">
+			<ng-container *ngFor="let dataField of dataFields">
+				<ion-col
+					*ngIf="dataField.isVisible"
+					class="data-field-container"
+					size="4"
+					style="margin-bottom: 2px"
+				>
+					<ion-card>
+						<ion-card-header>
+							<ion-card-subtitle
+								>{{ dataField.title }}</ion-card-subtitle
+							>
+							<ion-card-title
+								>{{ dataField.value }}</ion-card-title
+							>
+						</ion-card-header>
+						<ion-card-content>
+							{{ dataField.unit ? dataField.unit : '&nbsp;' }}
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ng-container>
+		</ion-row>
+	</ion-grid>
+</ion-content>

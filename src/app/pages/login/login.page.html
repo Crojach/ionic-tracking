@@ -1,0 +1,44 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Prijava</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-card style="margin-top: 30%">
+		<ion-card-header>
+			<ion-card-subtitle>
+				Školski sportski savez grada Zagreba</ion-card-subtitle
+			>
+			<ion-card-title>Prijavite se u aplikaciju</ion-card-title>
+		</ion-card-header>
+
+		<ion-card-content>
+			<ion-item>
+				<ion-label position="floating">Ime i prezime</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">OIB</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Broj iskaznice</ion-label>
+				<ion-input></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label position="floating">Datum rođenja</ion-label>
+				<ion-datetime
+					displayFormat="DD MM YYYY"
+					placeholder="Odaberite datum rođenja"
+				></ion-datetime>
+			</ion-item>
+		</ion-card-content>
+	</ion-card>
+</ion-content>
+
+<ion-footer>
+	<ion-toolbar>
+		<ion-button expand="full" (click)="login()">Prijava</ion-button>
+	</ion-toolbar>
+</ion-footer>

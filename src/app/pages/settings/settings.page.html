@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-title>Postavke</ion-title>
+		<ion-buttons slot="end">
+			<ion-button (click)="logout()">
+				<ion-icon slot="icon-only" color="danger" name="log-out-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-item>
+		<ion-label>Sport</ion-label>
+		<ion-select
+			[ngModel]="selectedSportType"
+			placeholder="Odaberite sport"
+			cancelText="Odustani"
+			okText="Odaberi"
+			(ionChange)="selectionChanged($event.detail.value)"
+		>
+			<ion-select-option [value]="SportType.Cycling"
+				>Biciklizam</ion-select-option
+			>
+			<ion-select-option [value]="SportType.Running"
+				>Trčanje</ion-select-option
+			>
+		</ion-select>
+	</ion-item>
+
+	<ion-reorder-group (ionItemReorder)="reorder($event)" disabled="false">
+		<ion-item *ngFor="let dataField of dataFields">
+			<ion-label> {{dataField.title}}</ion-label>
+			<ion-toggle [(ngModel)]="dataField.isVisible"></ion-toggle>
+			<ion-reorder slot="end"></ion-reorder>
+		</ion-item>
+	</ion-reorder-group>
+
+	<h3 class="ion-text-center">Pregled</h3>
+
+	<!--todo: extract component-->
+	<ion-grid>
+		<ion-row class="ion-justify-content-start ion-text-center">
+			<ng-container *ngFor="let dataField of dataFields">
+				<ion-col
+					*ngIf="dataField.isVisible"
+					class="data-field-container"
+					size="4"
+					style="margin-bottom: 2px"
+				>
+					<ion-card>
+						<ion-card-header>
+							<ion-card-subtitle
+								>{{ dataField.title }}</ion-card-subtitle
+							>
+							<ion-card-title
+								>{{ dataField.value }}</ion-card-title
+							>
+						</ion-card-header>
+						<ion-card-content>
+							{{ dataField.unit ? dataField.unit : '&nbsp;' }}
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ng-container>
+		</ion-row>
+	</ion-grid>
+</ion-content>
+
+<ion-footer>
+	<ion-toolbar>
+		<ion-button expand="full" (click)="saveOrder()">Spremi</ion-button>
+	</ion-toolbar>
+</ion-footer>
