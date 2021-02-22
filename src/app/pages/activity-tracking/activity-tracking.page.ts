@@ -14,6 +14,7 @@ import { AlertController, NavController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { Subscription } from 'rxjs';
 
 declare var mapboxgl;
 
@@ -53,14 +54,17 @@ export class ActivityTrackingPage implements OnInit {
   readonly mpsToKmh = 3.6;
   readonly milesToKm = 1.609344;
 
+  watchPositionSubscription: Subscription;
+
   readonly config: BackgroundGeolocationConfig = {
-    desiredAccuracy: 10,
+    desiredAccuracy: 0,
     stationaryRadius: 20,
     distanceFilter: 30,
-    debug: true,
-    stopOnTerminate: false,
+    debug: false,
+    stopOnTerminate: true,
     startForeground: true,
-
+    notificationTitle: 'Školski sportski savez Grada Zagreb',
+    notificationText: 'Praćenje aktivnosti je u tijeku'
   };
 
   constructor(
@@ -90,36 +94,75 @@ export class ActivityTrackingPage implements OnInit {
 
     this.backgroundGeolocation.configure(this.config)
       .then(() => {
-        this.showStatus('666');
-        this.backgroundGeolocation
-          .on(BackgroundGeolocationEvents.location)
-          .subscribe((location: BackgroundGeolocationResponse) => {
-            this.backgroundGeolocation.startTask().then((taskKey) => {
-              this.centerMap(location.longitude, location.latitude, location.time);
+        // this.showStatus('666');
+        // this.backgroundGeolocation
+        //   .on(BackgroundGeolocationEvents.location)
+        //   .subscribe((location: BackgroundGeolocationResponse) => {
+        //     this.backgroundGeolocation.startTask().then((taskKey) => {
+        //       this.centerMap(location.longitude, location.latitude, location.time);
 
-              this.consoleService.log('background', JSON.stringify(location));
+        //       this.analzyeMovement(
+        //         location.longitude,
+        //         location.latitude,
+        //         location.time,
+        //         location.speed,
+        //         location.altitude);
+
+        //       this.addPoint(location.longitude, location.latitude, location.time);
+
+        //       this.backgroundGeolocation.endTask(taskKey);
+
+        //       // this.backgroundGeolocation.stop();
+        //       // setTimeout(() => {
+
+        //       //   this.backgroundGeolocation.start();
+        //       // }, 1000);
+        //     });
+        //   });
+        // this.getCurrentPosition();
+      });
+
+    this.backgroundGeolocation
+      .on(BackgroundGeolocationEvents.background)
+      .subscribe(() => {
+        console.log('background');
+        this.watchPositionSubscription.unsubscribe();
+      });
+
+    this.backgroundGeolocation
+      .on(BackgroundGeolocationEvents.foreground)
+      .subscribe(() => {
+        console.log('foreground');
+
+        this.backgroundGeolocation.getValidLocations()
+          .then((locations: Array<BackgroundGeolocationResponse>) => {
+            locations.forEach(location => {
               this.analzyeMovement(
                 location.longitude,
                 location.latitude,
                 location.time,
                 location.speed,
-                location.altitude);
-
-              this.addPoint(location.longitude, location.latitude, location.time);
-
-              this.backgroundGeolocation.endTask(taskKey);
-
-              // this.backgroundGeolocation.stop();
-              // setTimeout(() => {
-
-              //   this.backgroundGeolocation.start();
-              // }, 1000);
+                location.altitude,
+                false);
             });
+
+            this.addPointBatch(locations.map(location => {
+              const subset = {
+                lng: location.longitude,
+                lat: location.latitude,
+                time: location.time,
+              };
+              return subset;
+            }) as any)
+
+            this.backgroundGeolocation.deleteAllLocations()
+              .then((response) => {
+                console.log('deleting', response);
+              }).finally(() => {
+                this.watchPosition();
+              });
           });
-        // this.getCurrentPosition();
       });
-
-
   }
 
   async startActivity(): Promise<void> {
@@ -127,7 +170,7 @@ export class ActivityTrackingPage implements OnInit {
     this.startDate = new Date();
     this.startTimer();
 
-    //this.watchPosition();
+    this.watchPosition();
     this.backgroundGeolocation.start();
 
     await this.insomnia.keepAwake();
@@ -206,7 +249,7 @@ export class ActivityTrackingPage implements OnInit {
       startVrijeme: this.startDate.toISOString(),
       krajVrijeme: this.endDate.toISOString(),
       trajanjeAktivnosti: new Date(this.time * 1000).toISOString().substr(11, 8),
-      udaljenost: this.traveledDistance,
+      udaljenost: this.traveledDistance * this.milesToKm,
       koordinate: JSON.stringify(this.geojson.features[0].geometry.coordinates)
     };
     this.httpService.post('', '', activityDto).then(() => {
@@ -307,31 +350,41 @@ export class ActivityTrackingPage implements OnInit {
     }
   }
 
-  private centerMap(lng: number, lat: number, timestamp: number): void {
+  private centerMap(lng: number, lat: number, timestamp: number, addPoint: boolean = true): void {
     if (!this.isMapCreated) {
       this.createMap(lng, lat);
     }
 
     this.map.panTo([lng, lat]);
 
-    this.addPoint(lng, lat, timestamp);
+    if (addPoint) {
+      this.addPoint(lng, lat, timestamp);
+    }
   }
 
   private watchPosition() {
-    this.geolocation.watchPosition({ enableHighAccuracy: true }).subscribe((position: any) => {
-      if (!position) {
-        return;
-      }
-      this.analzyeMovement(
-        position.coords.longitude,
-        position.coords.latitude,
-        position.timestamp,
-        position.coords.speed,
-        position.coords.altitude);
-    });
+    this.watchPositionSubscription =
+      this.geolocation.watchPosition({ enableHighAccuracy: true })
+        .subscribe((position: any) => {
+          if (!position) {
+            return;
+          }
+          this.analzyeMovement(
+            position.coords.longitude,
+            position.coords.latitude,
+            position.timestamp,
+            position.coords.speed,
+            position.coords.altitude);
+        });
   }
 
-  private analzyeMovement(longitude: number, latitude: number, time: number, speed: number, altitude: number): void {
+  private analzyeMovement(
+    longitude: number,
+    latitude: number,
+    time: number,
+    speed: number,
+    altitude: number,
+    addPoint: boolean = true): void {
     const convertedSpeed = speed
       ? Number(speed * this.mpsToKmh)
       : 0;
@@ -346,7 +399,7 @@ export class ActivityTrackingPage implements OnInit {
 
     this.setDataFields('pace', `${paceMinutes}:${paceSeconds < 10 ? '0' + paceSeconds : paceSeconds}`);
 
-    this.centerMap(longitude, latitude, time);
+    this.centerMap(longitude, latitude, time, addPoint);
 
     if (this.currentLocation) {
       this.previousLocation = {
@@ -405,6 +458,14 @@ export class ActivityTrackingPage implements OnInit {
 
   private addPoint(lng: number, lat: number, timestamp: number): void {
     this.geojson.features[0].geometry.coordinates.push([lng, lat, timestamp]);
+    const source = this.map.getSource('line');
+    if (source) {
+      source.setData(this.geojson);
+    }
+  }
+
+  private addPointBatch(points: Array<{ lng: number, lat: number, timestamp: number }>): void {
+    this.geojson.features[0].geometry.coordinates.push(...points);
     const source = this.map.getSource('line');
     if (source) {
       source.setData(this.geojson);
