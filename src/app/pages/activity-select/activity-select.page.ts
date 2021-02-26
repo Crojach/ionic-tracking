@@ -1,9 +1,9 @@
-import { Activity } from './../../../models/activity';
-import { SelectorPage } from './selector/selector.page';
+import { Activity, ParentActivity } from './../../../models/activity';
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
-import { SportType } from 'src/models/enums/sport-type';
+import { HttpService } from 'src/app/services/http/http.service';
+import { BackgroundLocationService } from 'src/app/services/background-location.service';
 
 @Component({
   selector: 'app-activity-select',
@@ -12,31 +12,45 @@ import { SportType } from 'src/models/enums/sport-type';
 })
 export class ActivitySelectPage implements OnInit {
   selectedActivity: Activity;
-  activities: Array<Activity>;
+  parentActivities: Array<ParentActivity>;
   constructor(
-    // private modalController: ModalController,
-    private navController: NavController
+    private navController: NavController,
+    private httpService: HttpService,
+    public backgroundLocationService: BackgroundLocationService
   ) { }
 
   ngOnInit() {
-    this.activities = new Array<Activity>();
+    // const user = JSON.parse(localStorage.getItem('user'));
 
-    this.activities.push(new Activity(1, 'Biciklom u školu', 'bicycle-outline', SportType.Cycling));
-    this.activities.push(new Activity(2, '5k cross', 'walk-outline', SportType.Running));
-    this.activities.push(new Activity(3, 'Vožnja biciklom', 'bicycle-outline', SportType.Cycling));
-    this.activities.push(new Activity(4, 'Trčanje', 'walk-outline', SportType.Running));
+    // if (user === null) {
+    //   this.navController.navigateRoot('login');
+    //   return;
+    // }
+
+    this.httpService.post('', '', {
+      token: 'ZaSadaJeOvoToken123',
+      rubrika: 'dohvatiAktivnosti',
+      osoba: '1707', // user.iskaznicaBroj,
+      brojIskaznice: '3212618321920' // user.id
+    })
+      .then((result) => {
+        const activities = JSON.parse(result.data) as Array<Activity>;
+
+        this.parentActivities = new Array<ParentActivity>();
+
+        activities.forEach(activity => {
+          let parent = this.parentActivities.find(x => x.id === activity.nadaktivnostId);
+
+          if (parent === undefined) {
+            parent = new ParentActivity(activity.nadaktivnostId, activity.nadaktivnostNaziv);
+            this.parentActivities.push(parent);
+          }
+
+          parent.activities.push(activity);
+        });
+      })
+      .catch((error) => console.log('error', error));
   }
-
-  // async showActivitySelector(): Promise<void> {
-  //   const modal = await this.modalController.create({
-  //     component: SelectorPage,
-  //   });
-
-  //   await modal.present();
-
-  //   const { data } = await modal.onWillDismiss();
-  //   this.selectedActivity = data;
-  // }
 
   startActivity(): void {
     const payload: NavigationExtras = {
@@ -47,7 +61,9 @@ export class ActivitySelectPage implements OnInit {
     this.navController.navigateForward('activity-tracking', payload);
   }
 
-  select(id: number) {
-    this.selectedActivity = this.activities.find(x => x.id === id);
+  select(activity: Activity) {
+    this.selectedActivity = activity;
+
+    this.backgroundLocationService.initialize();
   }
 }

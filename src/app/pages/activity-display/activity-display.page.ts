@@ -44,7 +44,10 @@ export class ActivityDisplayPage implements OnInit {
         ]
       };
 
-      this.createMap(coordinates);
+      setTimeout(() => {
+        
+        this.createMap(coordinates);
+      }, 0);
 
       this.setDataFields('time', this.activity.trajanjeAktivnosti);
       const timeParts = this.activity.trajanjeAktivnosti.split(':');
@@ -73,7 +76,7 @@ export class ActivityDisplayPage implements OnInit {
       this.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: coordinates[0],
+        center: [15.9159122, 45.7665807],
         zoom: 15
       });
 

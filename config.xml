@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyApp</name>
+<widget android-versionCode="8" id="io.crojach.tracking" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ŠSSGZ</name>
     <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="ivan@crojach.com" href="https://crojach.com/">Crojach software</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -17,7 +17,7 @@
     <preference name="FadeSplashScreenDuration" value="300" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="SplashScreenDelay" value="5000" />
     <platform name="android">
         <resource-file src="resources/android/icon/drawable-xxxhdpi-icon.png" target="app/src/main/res/mipmap/icon.png" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -107,7 +107,7 @@
         <variable name="ANDROID_SUPPORT_LIBRARY_VERSION" value="26+" />
         <variable name="ICON" value="@mipmap/icon" />
         <variable name="SMALL_ICON" value="@mipmap/icon" />
-        <variable name="ALWAYS_USAGE_DESCRIPTION" value="App requires background tracking " />
-        <variable name="MOTION_USAGE_DESCRIPTION" value="App requires motion detection" />
+        <variable name="ALWAYS_USAGE_DESCRIPTION" value="Aplikacija treba vaše dopuštenje za praćenje lokacije" />
+        <variable name="MOTION_USAGE_DESCRIPTION" value="Aplikacija treba vaše dopuštenje za pranje kretanja" />
     </plugin>
 </widget>

@@ -15,12 +15,7 @@ export class SelectorPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.activities = new Array<Activity>();
 
-    this.activities.push(new Activity(1, 'Biciklom u školu', 'bicycle-outline', SportType.Cycling));
-    this.activities.push(new Activity(2, '5k cross', 'walk-outline', SportType.Running));
-    this.activities.push(new Activity(3, 'Vožnja biciklom', 'bicycle-outline', SportType.Cycling));
-    this.activities.push(new Activity(4, 'Trčanje', 'walk-outline', SportType.Running));
   }
 
   select(id: number) {

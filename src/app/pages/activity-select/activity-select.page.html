@@ -1,56 +1,46 @@
 <ion-header [translucent]="true">
-	<ion-toolbar>
-		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
-		</ion-buttons>
-		<ion-title>Nova aktivnost</ion-title>
-	</ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Nova aktivnost</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-	<!-- 
-	<ion-card style="margin-top: 40%">
-			<ion-card-header>
-			<ion-card-subtitle>Odaberite aktivnost</ion-card-subtitle>
-		</ion-card-header> 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Dostupne aktivnosti</ion-card-subtitle>
+      <ion-card-title>Izaberite aktivnost koju želite odraditi</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngFor="let parent of parentActivities">
+        <ion-item>
+          <ion-label>{{parent.naziv}}</ion-label>
+        </ion-item>
+        <ion-item
+          *ngFor="let activity of parent.activities"
+          lines="full"
+          (click)="select(activity)"
+        >
+          <ion-icon [name]="activity.icon"></ion-icon>
+          <div class="activity-name">
+            <p class="title">{{activity.naziv}}</p>
+            <p class="duration">
+              {{activity.pocetak | date: 'dd.MM.yyyy'}} - {{activity.kraj |
+              date: 'dd.MM.yyyy'}}
+            </p>
+          </div>
+          <ion-button *ngIf="activity.pracenjeAktivnosti" class="select-button" size="small" fill="solid">
+            Odaberi
+          </ion-button>
+        </ion-item>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
-	<ion-card-content>
-			<ion-button expand="full" (click)="showActivitySelector()"
-				>Odaberite aktivnost</ion-button
-			>
-		</ion-card-content> 
-	</ion-card>
--->
-	<ion-card>
-		<ion-card-header>
-			<ion-card-subtitle>Dostupne aktivnosti</ion-card-subtitle>
-			<ion-card-title
-				>Izaberite aktivnost koju želite odraditi</ion-card-title
-			>
-		</ion-card-header>
-		<ion-card-content>
-			<ion-item
-				*ngFor="let activity of activities"
-				lines="full"
-				(click)="select(activity.id)"
-			>
-				<ion-icon [name]="activity.icon"></ion-icon>
-				<div class="activity-name">
-					<p class="title">{{activity.name}}</p>
-					<p class="duration">24.10. - 8.11.</p>
-				</div>
-				<ion-button class="select-button" size="small" fill="solid">
-					Odaberi
-				</ion-button>
-			</ion-item>
-		</ion-card-content>
-	</ion-card>
+	<ion-button *ngIf="selectedActivity" (click)="startActivity()" expand="block" fill="solid">
+		Pokreni '{{selectedActivity.naziv}}'
+		<ion-icon name="chevron-forward-outline"></ion-icon>
+	</ion-button>
 </ion-content>
-
-<ion-footer *ngIf="selectedActivity">
-	<ion-toolbar>
-		<ion-button (click)="startActivity()" expand="block" fill="solid">
-			Pokreni '{{selectedActivity.name}}'
-		</ion-button>
-	</ion-toolbar>
-</ion-footer>

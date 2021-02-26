@@ -27,10 +27,9 @@ export class LoginPage implements OnInit {
     this.httpService.post('', '', {
       token: 'ZaSadaJeOvoToken123',
       rubrika: 'login',
-      ime: 'Leon',
-      prezime: 'Cvetkovski',
-      datumRodjenja: '2003-02-06',
-      oib: '79879207653'
+      brojIskaznice: '4098047451920',
+      oib: '56263421087',
+      tipOsobe: '3'
     })
       .then((result) => {
         const user = result.data;
