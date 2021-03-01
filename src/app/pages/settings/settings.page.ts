@@ -1,4 +1,5 @@
-import { AlertController, NavController } from '@ionic/angular';
+import { BackgroundLocationService } from 'src/app/services/background-location.service';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { ToastService } from '../../services/toast.service';
 import { SportType } from './../../../models/enums/sport-type';
 import { DataFieldsService } from '../../services/data-fields.service';
@@ -16,15 +17,20 @@ export class SettingsPage implements OnInit {
 
   selectedSportType: SportType;
   dataFields: Array<DataField>;
+
+  isAndroid: boolean;
   constructor(
     public dataFieldsService: DataFieldsService,
     public toastService: ToastService,
     public alertController: AlertController,
-    public navController: NavController
+    public navController: NavController,
+    public backgroundLocationService: BackgroundLocationService,
+    public platform: Platform
   ) { }
 
   ngOnInit() {
     this.setSportType(SportType.Cycling);
+    this.isAndroid = this.platform.is('android');
   }
 
   selectionChanged(sportType: SportType): void {
@@ -61,6 +67,14 @@ export class SettingsPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  openAppSettings(): void {
+    this.backgroundLocationService.openAppSettings();
+  }
+
+  openLocationSettings(): void {
+    this.backgroundLocationService.openLocationSettings();
   }
 
   private setSportType(sportType: SportType): void {

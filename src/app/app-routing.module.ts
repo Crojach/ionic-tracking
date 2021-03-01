@@ -34,6 +34,10 @@ const routes: Routes = [
   {
     path: 'activity-display',
     loadChildren: () => import('./pages/activity-display/activity-display.module').then(m => m.ActivityDisplayPageModule)
+  },
+  {
+    path: 'info',
+    loadChildren: () => import('./pages/info/info.module').then( m => m.InfoPageModule)
   }
 ];
 

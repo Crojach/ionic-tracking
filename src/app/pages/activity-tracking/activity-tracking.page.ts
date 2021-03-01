@@ -71,7 +71,6 @@ export class ActivityTrackingPage implements OnInit {
 
   ngOnInit() {
     this.backgroundLocationService.subscribe().subscribe((data) => {
-      console.log('isbacktground', data.isBackground);
       if (!this.activityStarted) {
         return;
       }
@@ -203,13 +202,13 @@ export class ActivityTrackingPage implements OnInit {
       koordinate: JSON.stringify(this.geojson.features[0].geometry.coordinates)
     };
     this.httpService.post('', '', activityDto).then(() => {
-      let activities: Array<any> = JSON.parse(localStorage.getItem('activities'));
-      if (activities === null) {
-        activities = new Array<any>();
-      }
-      activities.push(activityDto);
+      // let activities: Array<any> = JSON.parse(localStorage.getItem('activities'));
+      // if (activities === null) {
+      //   activities = new Array<any>();
+      // }
+      // activities.push(activityDto);
 
-      localStorage.setItem('activities', JSON.stringify(activities));
+      // localStorage.setItem('activities', JSON.stringify(activities));
       this.showSuccess();
     });
 

@@ -1,9 +1,10 @@
 import { Activity, ParentActivity } from './../../../models/activity';
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { HttpService } from 'src/app/services/http/http.service';
 import { BackgroundLocationService } from 'src/app/services/background-location.service';
+import { InfoPage } from './../info/info.page';
 
 @Component({
   selector: 'app-activity-select',
@@ -16,17 +17,11 @@ export class ActivitySelectPage implements OnInit {
   constructor(
     private navController: NavController,
     private httpService: HttpService,
-    public backgroundLocationService: BackgroundLocationService
+    public backgroundLocationService: BackgroundLocationService,
+    private modalController: ModalController
   ) { }
 
-  ngOnInit() {
-    // const user = JSON.parse(localStorage.getItem('user'));
-
-    // if (user === null) {
-    //   this.navController.navigateRoot('login');
-    //   return;
-    // }
-
+  async ngOnInit() {
     this.httpService.post('', '', {
       token: 'ZaSadaJeOvoToken123',
       rubrika: 'dohvatiAktivnosti',
@@ -50,6 +45,15 @@ export class ActivitySelectPage implements OnInit {
         });
       })
       .catch((error) => console.log('error', error));
+
+    const firstTime = localStorage.getItem('firstTime');
+    if (firstTime === null) {
+      localStorage.setItem('firstTime', '');
+      const modal = await this.modalController.create({
+        component: InfoPage
+      });
+      return await modal.present();
+    }
   }
 
   startActivity(): void {
@@ -63,7 +67,5 @@ export class ActivitySelectPage implements OnInit {
 
   select(activity: Activity) {
     this.selectedActivity = activity;
-
-    this.backgroundLocationService.initialize();
   }
 }

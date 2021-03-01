@@ -1,7 +1,9 @@
+import { HttpService } from 'src/app/services/http/http.service';
 import { DataField } from './../../../models/data-field';
 import { DataFieldsService } from './../../services/data-fields.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ActivityDto, ParentActivityDto } from 'src/models/activityDto';
 
 declare var mapboxgl;
 
@@ -18,10 +20,12 @@ export class ActivityDisplayPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataFieldsService: DataFieldsService
+    private dataFieldsService: DataFieldsService,
+    private httpService: HttpService
   ) { }
 
   ngOnInit() {
+
   }
 
   ionViewDidEnter() {
@@ -45,7 +49,7 @@ export class ActivityDisplayPage implements OnInit {
       };
 
       setTimeout(() => {
-        
+
         this.createMap(coordinates);
       }, 0);
 
@@ -54,7 +58,8 @@ export class ActivityDisplayPage implements OnInit {
       let totalHours = parseInt(timeParts[0], 10);
       totalHours += parseInt(timeParts[1], 10) / 60;
       totalHours += parseInt(timeParts[2], 10) / 3600;
-      const speed = this.activity.udaljenost / totalHours;
+      const distance = parseFloat(this.activity.udaljenost);
+      const speed = distance / totalHours;
 
       this.setDataFields('speed', speed.toFixed(1));
 
@@ -65,7 +70,7 @@ export class ActivityDisplayPage implements OnInit {
 
       this.setDataFields('pace', `${paceMinutes}:${paceSeconds < 10 ? '0' + paceSeconds : paceSeconds}`);
 
-      this.setDataFields('distance', (this.activity.udaljenost).toFixed(1));
+      this.setDataFields('distance', (distance).toFixed(1));
       this.setDataFields('altitude', (0).toFixed(1));
     });
   }
@@ -76,7 +81,7 @@ export class ActivityDisplayPage implements OnInit {
       this.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [15.9159122, 45.7665807],
+        center: [15.9768091, 45.8134722],
         zoom: 15
       });
 

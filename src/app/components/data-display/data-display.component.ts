@@ -13,6 +13,6 @@ export class DataDisplayComponent implements OnInit {
   ngOnInit() { }
 
   ionViewDidEnter() {
-    console.log('datafields', this.dataFields)
+
   }
 }

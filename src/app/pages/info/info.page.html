@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Školski sportski savez Grada Zagreba</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #content class="ion-padding">
+  <ion-slides #slides [options]="sliderOptions">
+    <ion-slide>
+      <div class="slide-content">
+        <h2>
+          Hvala vam što koristite mobilnu aplikaciju
+          <b>Školskog sportskog saveza Grada Zagreba</b>
+        </h2>
+        <br />
+        <h6>
+          Prije prvog korištenja morat ćemo vas upoznati s nekoliko pojedinosti
+          aplikacije. Kad ste spremni samo pritisnite na gumb "Kreni".
+        </h6>
+        <img src="../../../assets/icon-zagi.png" style="width: 50%" alt="" />
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide-content">
+        <h6>
+          Kako biste mogli koristiti aplikaciju potrebno joj je dozvoliti
+          praćenje vaše lokacije
+        </h6>
+        <img src="../../../assets/map-display.jpg" alt="" />
+        <h6>
+          Aplikacija će pratiti vašu lokaciju dok je aplikacije <b>upaljena</b>
+        </h6>
+        <p>
+          Prilikom promjene lokacije aplikacija će odmah iscrtati vašu novu
+          lokaciju na mapu, prikazati vam ukupno prijeđenu udaljenost kao i još
+          niz drugih parametara koje možete podesiti u postavkama
+        </p>
+        <h6>
+          Aplikacija će pratiti vašu lokaciju dok je aplikacije
+          <b>u pozadini</b>
+        </h6>
+        <p>
+          Ukoliko ste započeli aktivnost i izgasili ekran ili upalili neku drugu
+          aplikaciju, ova aplikacija će i dalje pratiti vaše kretanje i spremati
+          svaku promjenu u internu bazu podataka. U trenutku kada aplikacija
+          opet postane upaljena sve spremljene promjene će se analizirati i
+          prikazati na karti kako biste imali potpuni uvid u vaše kretanje
+        </p>
+        <p>
+          Pri završetku aktivnosti će vas aplikacija pitati želite li pohraniti
+          tu aktivnost. Ukoliko potvrdite, vaša aktivnost zajedno sa
+          <b>podacima o lokacijama</b>
+          se šalje na središnji poslužitelj i nad vašim podacima će se izvršiti
+          obrada sa svrhom rangiranja vaše aktivnosti u odnosu na druge
+          korisnike. Samo ovlaštene osobe će imati uvid u vaše kretanje i ono će
+          se koristiti samo u svrhu natjecanja i <b>neće se dijeliti</b> s
+          trećim stranama. Ukoliko ne želite spremiti aktivnost, svi podaci će
+          se <b>trajno obrisati</b> i neće biti dostupne za reprodukciju.
+        </p>
+        <p>
+          Ukoliko se slažete s navedenim uvjetima molimo vas da to potvrdite
+          pritiskom na gumb "Dopusti praćenje u pozadini"
+        </p>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide-content">
+        <h2>Postavke aplikacije</h2>
+        <h6>
+          Mnogi proizvođači optimiziraju rad svog operacijskog sustava na način
+          da ugase aplikacije koje po njihovim parametrima koriste previše
+          resurse uređaja. Iz tog razloga ponekad je potrebno dozvoliti
+          aplikaciji veća prava od onih koja joj se dodjele pri instalaciji.
+          Ukoliko želite pogledati postavke za bateriju i lokaciju, možete
+          pritisnuti gumb "Idi na postavke". Ukoliko to sada ne želite, možete u
+          bilo kojem trenutku iz glavnog izbornika odabrati "Postavke" i
+          podesiti stvari prema vlastitim kriterijima.
+        </h6>
+
+        <h6>
+          Ukoliko želite potpuno iskoristiti funkcionalnost aplikacije
+          preporučujemo da pogledate klikom na sljedeći
+          <a href="https://dontkillmyapp.com/">link</a> upoznate s preporučenim
+          postavkama za aplikaciju. 
+        </h6>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button
+      *ngIf="currentIndex === 0"
+      color="primary"
+      expand="block"
+      (click)="startWizzard()"
+      ><ion-icon name="arrow-forward" class="small-margin-right"></ion-icon
+      >Kreni</ion-button
+    >
+    <ion-grid *ngIf="currentIndex > 0">
+      <ion-row>
+        <ion-col size="3">
+          <ion-button (click)="close()" expand="block" fill="clear">
+            Preskoči
+          </ion-button>
+        </ion-col>
+        <ion-col size="9">
+          <ion-button
+            color="primary"
+            expand="block"
+            (click)="startBackgroundLocation()"
+            *ngIf="currentIndex === 1"
+            ><ion-icon
+              name="location-outline"
+              class="small-margin-right"
+            ></ion-icon
+            >Dopusti praćenje u pozadini</ion-button
+          >
+          <ion-button
+            color="primary"
+            expand="block"
+            (click)="openSettings()"
+            *ngIf="currentIndex === 2"
+            ><ion-icon name="cog-outline" class="small-margin-right"></ion-icon
+            >Idi na postavke
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

@@ -1,31 +1,36 @@
 <ion-header [translucent]="true">
-	<ion-toolbar>
-		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
-		</ion-buttons>
-		<ion-title>Moje aktivnosti</ion-title>
-	</ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Moje aktivnosti</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-	<ion-item
-		*ngFor="let activity of activities"
-		lines="full"
-		(click)="open(activity)"
-	>
-		<ion-icon [name]="activity.icon"></ion-icon>
-		<div class="activity">
-			<p class="name">{{activity.nazivAktivnosti}}</p>
-			<p>
-				<span class="date">
-					{{activity.startVrijeme | date: 'dd.MM.yyyy'}}
-				</span>
-				<span class="time">
-					{{activity.startVrijeme | date: 'HH:mm'}} -
-					{{activity.krajVrijeme | date: 'HH:mm'}}
-				</span>
-			</p>
-		</div>
-		<ion-icon class="checkmark" name="checkmark-outline"></ion-icon>
-	</ion-item>
+  <div *ngFor="let parent of parentActivities">
+    <ion-item>
+      <ion-label>{{parent.naziv}}</ion-label>
+    </ion-item>
+    <ion-item
+      *ngFor="let activity of parent.activities"
+      lines="full"
+      (click)="open(activity)"
+    >
+      <ion-icon [name]="activity.icon"></ion-icon>
+      <div class="activity">
+        <p class="name">{{activity.nazivAktivnosti}}</p>
+        <p>
+          <span class="date">
+            {{activity.startVrijeme | date: 'dd.MM.yyyy'}}
+          </span>
+          <span class="time">
+            {{activity.startVrijeme | date: 'HH:mm'}} - {{activity.krajVrijeme |
+            date: 'HH:mm'}}
+          </span>
+        </p>
+      </div>
+      <ion-icon class="checkmark" name="checkmark-outline"></ion-icon>
+    </ion-item>
+  </div>
 </ion-content>

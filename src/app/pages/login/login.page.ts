@@ -1,8 +1,6 @@
-import { ConsoleService } from './../../services/console.service';
 import { HttpService } from './../../services/http/http.service';
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
-
 
 @Component({
   selector: 'app-login',
@@ -15,10 +13,10 @@ export class LoginPage implements OnInit {
     private navController: NavController,
     private menuController: MenuController,
     private httpService: HttpService,
-    private consoleService: ConsoleService
+
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.menuController.enable(false);
   }
 

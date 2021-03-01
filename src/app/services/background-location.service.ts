@@ -9,12 +9,11 @@ import { Subject } from 'rxjs';
 export class BackgroundLocationService {
   readonly config: BackgroundGeolocationConfig = {
     desiredAccuracy: 0,
-    stationaryRadius: 10,
-    distanceFilter: 15,
-    debug: true,
-    interval: 1000,
+    stationaryRadius: 20,
+    distanceFilter: 30,
+    debug: false,
+    interval: 2000,
     stopOnTerminate: false,
-    startForeground: true,
     notificationTitle: 'Školski sportski savez Grada Zagreba',
     notificationText: 'Praćenje aktivnosti je u tijeku'
   };
@@ -41,7 +40,6 @@ export class BackgroundLocationService {
     this.backgroundGeolocation
       .on(BackgroundGeolocationEvents.background)
       .subscribe(() => {
-        console.log('background');
         this.subject.next({
           isBackground: true
         });
@@ -50,8 +48,6 @@ export class BackgroundLocationService {
     this.backgroundGeolocation
       .on(BackgroundGeolocationEvents.foreground)
       .subscribe(() => {
-        console.log('foreground');
-
         this.backgroundGeolocation.getLocations()
           .then((locations: Array<BackgroundGeolocationResponse>) => {
             this.subject.next({
@@ -61,7 +57,7 @@ export class BackgroundLocationService {
 
             this.backgroundGeolocation.deleteAllLocations()
               .then((response) => {
-                console.log('deleting', response);
+
               });
           });
       });
@@ -76,7 +72,6 @@ export class BackgroundLocationService {
       if (!serviceStatus.isRunning) {
         this.backgroundGeolocation.start();
       }
-      console.log('authorization', serviceStatus.authorization);
     });
   }
 
@@ -87,7 +82,14 @@ export class BackgroundLocationService {
   clear(): void {
     this.backgroundGeolocation.deleteAllLocations()
       .then((response) => {
-        console.log('deleting', response);
       });
+  }
+
+  openAppSettings(): void {
+    this.backgroundGeolocation.showAppSettings();
+  }
+
+  openLocationSettings(): void {
+    this.backgroundGeolocation.showLocationSettings();
   }
 }

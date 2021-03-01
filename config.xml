@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="8" id="io.crojach.tracking" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10" id="io.crojach.tracking" version="1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ŠSSGZ</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="ivan@crojach.com" href="https://crojach.com/">Crojach software</author>
